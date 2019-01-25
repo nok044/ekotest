@@ -1,12 +1,23 @@
-var regExp = /\(([^)]+)\)/;
-
 var transformWord = (word) => {
-    while(matches = regExp.exec(word)){
-        var str = matches[1].split('').reverse().join('')
-        word = word.replace(matches[0],str)
-    }
+    var charList = word.split('')
+    var stack = []
+    var str = ''
+    charList.forEach((char) => {
+        if(char === '(')
+            stack.push('(')
+        else if(char === ')'){
+            var tmp = ''
+            var tmpStr = ''
+            while((tmp = stack.pop()) !== '(')
+                tmpStr += tmp
+            str += tmpStr
+        }else if(stack.length)
+            stack.push(char)
+        else
+            str += char
+    })
 
-    return word + ' => ' + word
+    return word + ' => ' + str
 }
 
 console.log(transformWord('foo(bar)'))
